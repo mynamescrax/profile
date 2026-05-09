@@ -35,7 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const socialIcons = document.querySelectorAll('.social-icon');
   const badges = document.querySelectorAll('.badge');
 
+  const musicPlayerEl = document.getElementById('music-player');
+  const topControlsEl = document.querySelector('.top-controls');
+
   const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+  function positionBelowProfile() {
+    const rect = profileBlock.getBoundingClientRect();
+    musicPlayerEl.style.top = (rect.bottom + 12) + 'px';
+    topControlsEl.style.top = (rect.bottom + 12 + musicPlayerEl.offsetHeight + 10) + 'px';
+  }
+
+  positionBelowProfile();
+  window.addEventListener('resize', positionBelowProfile);
 
 
   const startMessage = "Click here to see the motion baby";
@@ -81,9 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
     profileBlock.classList.remove('hidden');
     gsap.fromTo(profileBlock,
       { opacity: 0, y: -50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
+      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onUpdate: positionBelowProfile, onComplete: () => {
         profileBlock.classList.add('profile-appear');
         profileContainer.classList.add('orbit');
+        positionBelowProfile();
       }}
     );
     transparencySlider.dispatchEvent(new Event('input'));
@@ -101,9 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
     profileBlock.classList.remove('hidden');
     gsap.fromTo(profileBlock,
       { opacity: 0, y: -50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
+      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onUpdate: positionBelowProfile, onComplete: () => {
         profileBlock.classList.add('profile-appear');
         profileContainer.classList.add('orbit');
+        positionBelowProfile();
       }}
     );
     transparencySlider.dispatchEvent(new Event('input'));
@@ -222,6 +236,11 @@ document.addEventListener('DOMContentLoaded', () => {
       profileBlock.style.borderOpacity = '0';
       profileBlock.style.borderColor = 'transparent';
       profileBlock.style.backdropFilter = 'none';
+      musicPlayerEl.style.background = 'rgba(0, 0, 0, 0)';
+      musicPlayerEl.style.borderColor = 'transparent';
+      musicPlayerEl.style.backdropFilter = 'none';
+      topControlsEl.style.background = 'rgba(0, 0, 0, 0)';
+      topControlsEl.style.backdropFilter = 'none';
       profileBlock.style.pointerEvents = 'auto';
       socialIcons.forEach(icon => {
         icon.style.pointerEvents = 'auto';
@@ -241,6 +260,11 @@ document.addEventListener('DOMContentLoaded', () => {
       profileBlock.style.borderOpacity = opacity;
       profileBlock.style.borderColor = '';
       profileBlock.style.backdropFilter = `blur(${10 * opacity}px)`;
+      musicPlayerEl.style.background = `rgba(0, 0, 0, ${opacity})`;
+      musicPlayerEl.style.borderColor = `rgba(255, 255, 255, ${0.2 * opacity})`;
+      musicPlayerEl.style.backdropFilter = `blur(${10 * opacity}px)`;
+      topControlsEl.style.background = `rgba(0, 0, 0, ${opacity})`;
+      topControlsEl.style.backdropFilter = `blur(${10 * opacity}px)`;
       profileBlock.style.pointerEvents = 'auto';
       socialIcons.forEach(icon => {
         icon.style.pointerEvents = 'auto';
