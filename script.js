@@ -301,22 +301,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  profileBlock.addEventListener('mousemove', (e) => handleTilt(e, profileBlock));
-  profileBlock.addEventListener('touchmove', (e) => {
+  contentWrapper.addEventListener('mousemove', (e) => handleTilt(e, contentWrapper));
+  contentWrapper.addEventListener('touchmove', (e) => {
     e.preventDefault();
-    handleTilt(e, profileBlock);
+    handleTilt(e, contentWrapper);
   });
 
-  profileBlock.addEventListener('mouseleave', () => {
-    gsap.to(profileBlock, {
+  contentWrapper.addEventListener('mouseleave', () => {
+    gsap.to(contentWrapper, {
       rotationX: 0,
       rotationY: 0,
       duration: 0.5,
       ease: 'power2.out'
     });
   });
-  profileBlock.addEventListener('touchend', () => {
-    gsap.to(profileBlock, {
+  contentWrapper.addEventListener('touchend', () => {
+    gsap.to(contentWrapper, {
       rotationX: 0,
       rotationY: 0,
       duration: 0.5,
