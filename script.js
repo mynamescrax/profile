@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
 
-  const startMessage = "Click here to see the motion baby";
+  const startMessage = "Click here to see me bbg 😘😘";
   let startTextContent = '';
   let startIndex = 0;
   let startCursorVisible = true;
@@ -72,6 +72,40 @@ document.addEventListener('DOMContentLoaded', () => {
       visitorCount.textContent = '?';
     }
   }
+
+  const DISCORD_USER_ID = '1327961337757831219';
+  const STATUS_LABELS = { online: 'Online', idle: 'Idle', dnd: 'Do Not Disturb', offline: 'Offline' };
+  const ACTIVITY_PREFIXES = ['Playing', 'Streaming', 'Listening to', 'Watching', '', 'Competing in'];
+
+  async function fetchDiscordStatus() {
+    try {
+      const res = await fetch(`https://api.lanyard.rest/v1/users/${DISCORD_USER_ID}`);
+      const { success, data } = await res.json();
+      if (!success) return;
+
+      const dot = document.getElementById('status-dot');
+      const text = document.getElementById('status-text');
+      const { discord_status, activities, spotify } = data;
+
+      dot.className = `status-dot ${discord_status}`;
+
+      let label = STATUS_LABELS[discord_status] || 'Offline';
+      const activity = activities.find(a => a.type !== 4);
+      if (spotify) {
+        label += ` · Listening to ${spotify.song} by ${spotify.artist}`;
+      } else if (activity) {
+        const prefix = ACTIVITY_PREFIXES[activity.type] || '';
+        label += ` · ${prefix ? prefix + ' ' : ''}${activity.name}`;
+      }
+
+      text.textContent = label;
+    } catch {
+      // silently fail — Lanyard might be unreachable
+    }
+  }
+
+  fetchDiscordStatus();
+  setInterval(fetchDiscordStatus, 30000);
 
   initializeVisitorCounter();
 

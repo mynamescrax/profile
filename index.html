@@ -280,6 +280,29 @@
             transform: scale(1.2);
         }
 
+        .discord-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            opacity: 1 !important;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 0 6px currentColor;
+        }
+
+        .status-dot.online  { background: #3ba55d; color: #3ba55d; }
+        .status-dot.idle    { background: #faa81a; color: #faa81a; }
+        .status-dot.dnd     { background: #ed4245; color: #ed4245; }
+        .status-dot.offline { background: #747f8d; color: #747f8d; box-shadow: none; }
+
         #profile-bio {
             color: rgba(255, 255, 255, 0.8);
             font-size: 18px;
@@ -797,6 +820,10 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div id="discord-status" class="discord-status">
+                        <span id="status-dot" class="status-dot offline"></span>
+                        <span id="status-text">Offline</span>
                     </div>
                     <div id="profile-bio"></div>
                 </div>
