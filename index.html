@@ -130,7 +130,7 @@
             max-height: min(400px, calc(100vh - 220px));
             overflow: hidden;
             background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: none;
             padding: 20px;
             border-radius: 15px;
             display: flex;
@@ -471,7 +471,7 @@
 
 
         .home-theme #profile-block {
-            border-color: rgba(255, 105, 180, 0.6);
+            border-color: transparent;
         }
 
 
@@ -787,14 +787,12 @@
             opacity: 0.6;
         }
         #profile-outline {
-            position: fixed;
-            border: 3px solid white;
-            border-radius: 17px;
+            position: absolute;
+            overflow: visible;
             mix-blend-mode: difference;
             pointer-events: none;
             z-index: 4;
             opacity: 0;
-            transition: opacity 1s ease;
         }
     </style>
     <link href="assets/Retro Gaming.ttf" rel="stylesheet">
@@ -816,6 +814,7 @@
 
 
         <div id="content-wrapper">
+        <svg id="profile-outline"><rect fill="none" stroke="white" stroke-width="1.5" rx="15" ry="15"/></svg>
         <div id="profile-block">
             <div class="profile-header">
                 <div class="profile-container">
@@ -914,7 +913,6 @@
             </div>
         </div>
         </div>
-        <div id="profile-outline"></div>
     </div>
 
 

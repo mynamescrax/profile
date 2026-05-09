@@ -113,16 +113,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startOutlineSync() {
     profileOutline.style.opacity = '1';
-    const borderWidth = 3;
-    function sync() {
-      const rect = profileBlock.getBoundingClientRect();
-      profileOutline.style.top = (rect.top - borderWidth) + 'px';
-      profileOutline.style.left = (rect.left - borderWidth) + 'px';
-      profileOutline.style.width = (rect.width + borderWidth * 2) + 'px';
-      profileOutline.style.height = (rect.height + borderWidth * 2) + 'px';
-      requestAnimationFrame(sync);
+    const outlineRect = profileOutline.querySelector('rect');
+    const bw = 1.5;
+
+    function positionOutline() {
+      const w = profileBlock.offsetWidth + bw * 2;
+      const h = profileBlock.offsetHeight + bw * 2;
+      profileOutline.style.top = (profileBlock.offsetTop - bw) + 'px';
+      profileOutline.style.left = (profileBlock.offsetLeft - bw) + 'px';
+      profileOutline.setAttribute('width', w);
+      profileOutline.setAttribute('height', h);
+      outlineRect.setAttribute('x', bw);
+      outlineRect.setAttribute('y', bw);
+      outlineRect.setAttribute('width', w - bw * 2);
+      outlineRect.setAttribute('height', h - bw * 2);
     }
-    sync();
+
+    positionOutline();
+    window.addEventListener('resize', positionOutline);
+
+    const segmentLength = 80;
+    let offset = 0;
+    function frame() {
+      const perimeter = outlineRect.getTotalLength();
+      outlineRect.style.strokeDasharray = segmentLength + ' ' + (perimeter - segmentLength);
+      offset -= 1.5;
+      if (offset < -perimeter) offset += perimeter;
+      outlineRect.style.strokeDashoffset = offset;
+      requestAnimationFrame(frame);
+    }
+    frame();
   }
 
   startScreen.addEventListener('click', () => {
@@ -131,12 +151,12 @@ document.addEventListener('DOMContentLoaded', () => {
     backgroundMusic.play().catch(err => {
       console.error("Failed to play music after start screen click:", err);
     });
+    startOutlineSync();
     gsap.fromTo(contentWrapper,
       { opacity: 0, y: -50 },
       { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
         profileBlock.classList.add('profile-appear');
         profileContainer.classList.add('orbit');
-        startOutlineSync();
       }}
     );
     transparencySlider.dispatchEvent(new Event('input'));
@@ -151,12 +171,12 @@ document.addEventListener('DOMContentLoaded', () => {
     backgroundMusic.play().catch(err => {
       console.error("Failed to play music after start screen touch:", err);
     });
+    startOutlineSync();
     gsap.fromTo(contentWrapper,
       { opacity: 0, y: -50 },
       { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
         profileBlock.classList.add('profile-appear');
         profileContainer.classList.add('orbit');
-        startOutlineSync();
       }}
     );
     transparencySlider.dispatchEvent(new Event('input'));
