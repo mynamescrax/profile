@@ -59,25 +59,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 500);
 
 
-  function initializeVisitorCounter() {
-    let totalVisitors = localStorage.getItem('totalVisitorCount');
-    if (!totalVisitors) {
-      totalVisitors = 921234;
-      localStorage.setItem('totalVisitorCount', totalVisitors);
-    } else {
-      totalVisitors = parseInt(totalVisitors);
+  async function initializeVisitorCounter() {
+    try {
+      const res = await fetch('/api/views', { method: 'POST' });
+      const data = await res.json();
+      visitorCount.textContent = Number(data.count).toLocaleString();
+    } catch {
+      visitorCount.textContent = '?';
     }
-
-    const hasVisited = localStorage.getItem('hasVisited');
-    if (!hasVisited) {
-      totalVisitors++;
-      localStorage.setItem('totalVisitorCount', totalVisitors);
-      localStorage.setItem('hasVisited', 'true');
-    }
-
-    visitorCount.textContent = totalVisitors.toLocaleString();
   }
-
 
   initializeVisitorCounter();
 
