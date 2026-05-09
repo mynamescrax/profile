@@ -347,5 +347,69 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
+  const musicProgress = document.getElementById('music-progress');
+  const currentTimeEl = document.getElementById('current-time');
+  const totalTimeEl = document.getElementById('total-time');
+  const playPauseBtn = document.getElementById('play-pause-btn');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60);
+    return m + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+  }
+
+  function updateProgressFill() {
+    const pct = (backgroundMusic.currentTime / (backgroundMusic.duration || 1)) * 100;
+    musicProgress.style.background = `linear-gradient(to right, rgba(255,255,255,0.9) ${pct}%, rgba(255,255,255,0.25) ${pct}%)`;
+  }
+
+  backgroundMusic.addEventListener('loadedmetadata', () => {
+    totalTimeEl.textContent = formatTime(backgroundMusic.duration);
+    musicProgress.max = backgroundMusic.duration;
+  });
+
+  backgroundMusic.addEventListener('timeupdate', () => {
+    if (!musicProgress._seeking) {
+      currentTimeEl.textContent = formatTime(backgroundMusic.currentTime);
+      musicProgress.value = backgroundMusic.currentTime;
+      updateProgressFill();
+    }
+  });
+
+  musicProgress.addEventListener('mousedown', () => { musicProgress._seeking = true; });
+  musicProgress.addEventListener('touchstart', () => { musicProgress._seeking = true; });
+
+  musicProgress.addEventListener('input', () => {
+    currentTimeEl.textContent = formatTime(Number(musicProgress.value));
+    const pct = (musicProgress.value / (backgroundMusic.duration || 1)) * 100;
+    musicProgress.style.background = `linear-gradient(to right, rgba(255,255,255,0.9) ${pct}%, rgba(255,255,255,0.25) ${pct}%)`;
+  });
+
+  musicProgress.addEventListener('change', () => {
+    backgroundMusic.currentTime = musicProgress.value;
+    musicProgress._seeking = false;
+  });
+
+  backgroundMusic.addEventListener('play', () => {
+    playPauseBtn.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+  });
+
+  backgroundMusic.addEventListener('pause', () => {
+    playPauseBtn.innerHTML = '<path d="M8 5v14l11-7z"/>';
+  });
+
+  playPauseBtn.addEventListener('click', () => {
+    if (backgroundMusic.paused) {
+      backgroundMusic.muted = false;
+      backgroundMusic.play();
+    } else {
+      backgroundMusic.pause();
+    }
+  });
+
+  prevBtn.addEventListener('click', () => { backgroundMusic.currentTime = 0; });
+  nextBtn.addEventListener('click', () => { backgroundMusic.currentTime = 0; });
+
   typeWriterStart();
 });

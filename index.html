@@ -629,9 +629,26 @@
             }
 
             .top-controls {
-                bottom: 70px;
+                bottom: 90px;
                 gap: 10px;
                 padding: 6px 10px;
+            }
+
+            #music-player {
+                width: calc(100vw - 40px);
+                bottom: 15px;
+                padding: 8px 10px;
+                gap: 8px;
+            }
+
+            .player-art {
+                width: 28px;
+                height: 28px;
+            }
+
+            .player-art svg {
+                width: 16px;
+                height: 16px;
             }
 
             .volume-control, .transparency-control {
@@ -657,6 +674,107 @@
                 font-size: 18px;
                 padding: 0 20px;
             }
+        }
+        #music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(28, 28, 30, 0.92);
+            backdrop-filter: blur(20px);
+            border-radius: 14px;
+            padding: 8px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 20;
+            width: 400px;
+            color: white;
+        }
+
+        .player-art {
+            width: 34px;
+            height: 34px;
+            background: rgba(90, 90, 100, 0.8);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .player-art svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        #current-time, #total-time {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.6);
+            white-space: nowrap;
+            font-family: 'Courier New', monospace;
+            min-width: 28px;
+        }
+
+        #progress-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+
+        #music-progress {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #music-progress::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+        }
+
+        #music-progress::-moz-range-thumb {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background: white;
+            cursor: pointer;
+            border: none;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .ctrl-btn {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            color: white;
+            flex-shrink: 0;
+            transition: opacity 0.15s;
+        }
+
+        .ctrl-play {
+            width: 26px;
+            height: 26px;
+        }
+
+        .ctrl-btn:hover {
+            opacity: 0.6;
         }
     </style>
     <link href="assets/Retro Gaming.ttf" rel="stylesheet">
@@ -732,6 +850,30 @@
 
 
 
+
+        <div id="music-player">
+            <div class="player-art">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+            </div>
+            <span id="current-time">0:00</span>
+            <div id="progress-container">
+                <input type="range" id="music-progress" min="0" max="100" value="0" step="0.01">
+            </div>
+            <span id="total-time">0:00</span>
+            <div class="player-controls">
+                <svg id="prev-btn" viewBox="0 0 24 24" fill="currentColor" class="ctrl-btn">
+                    <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/>
+                </svg>
+                <svg id="play-pause-btn" viewBox="0 0 24 24" fill="currentColor" class="ctrl-btn ctrl-play">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                <svg id="next-btn" viewBox="0 0 24 24" fill="currentColor" class="ctrl-btn">
+                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                </svg>
+            </div>
+        </div>
 
         <div class="top-controls">
             <div class="volume-control">
