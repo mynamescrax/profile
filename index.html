@@ -100,40 +100,42 @@
 
         
         .top-controls {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
             align-items: center;
             gap: 15px;
-            z-index: 20;
             background: rgba(0, 0, 0, 0.7);
             padding: 8px 12px;
             border-radius: 20px;
             backdrop-filter: blur(5px);
         }
 
-        
-        #profile-block {
+
+        #content-wrapper {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            z-index: 20;
+            opacity: 0;
+        }
+
+        #profile-block {
             width: 820px;
             min-height: 332px;
-            max-height: min(480px, calc(100vh - 160px));
+            max-height: min(400px, calc(100vh - 220px));
             overflow: hidden;
             background: rgba(0, 0, 0, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 20px;
             border-radius: 15px;
-            z-index: 20;
             display: flex;
             flex-direction: column;
             gap: 15px;
             backdrop-filter: blur(10px);
-            opacity: 0;
             transform-style: preserve-3d;
             transition: transform 0.5s ease-out;
             pointer-events: auto;
@@ -523,9 +525,6 @@
                 min-height: unset;
                 padding: 12px;
                 gap: 8px;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
             }
 
             .profile-header {
@@ -629,7 +628,6 @@
             }
 
             .top-controls {
-                bottom: 90px;
                 gap: 10px;
                 padding: 6px 10px;
             }
@@ -671,10 +669,6 @@
             }
         }
         #music-player {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(10px);
@@ -683,7 +677,6 @@
             display: flex;
             align-items: center;
             gap: 14px;
-            z-index: 20;
             width: 820px;
             color: white;
         }
@@ -788,6 +781,7 @@
         <div class="glitch-overlay"></div>
 
 
+        <div id="content-wrapper">
         <div id="profile-block">
             <div class="profile-header">
                 <div class="profile-container">
@@ -881,6 +875,7 @@
                 <input id="transparency-slider" class="slider" type="range" min="0" max="1" step="0.01" value="0.4">
             </div>
         </div>
+        </div>
     </div>
 
 
@@ -892,6 +887,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
 </body>
 </html>

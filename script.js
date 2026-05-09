@@ -37,17 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const musicPlayerEl = document.getElementById('music-player');
   const topControlsEl = document.querySelector('.top-controls');
+  const contentWrapper = document.getElementById('content-wrapper');
 
   const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-
-  function positionBelowProfile() {
-    const rect = profileBlock.getBoundingClientRect();
-    musicPlayerEl.style.top = (rect.bottom + 12) + 'px';
-    topControlsEl.style.top = (rect.bottom + 12 + musicPlayerEl.offsetHeight + 10) + 'px';
-  }
-
-  positionBelowProfile();
-  window.addEventListener('resize', positionBelowProfile);
 
 
   const startMessage = "Click here to see the motion baby";
@@ -90,13 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
     backgroundMusic.play().catch(err => {
       console.error("Failed to play music after start screen click:", err);
     });
-    profileBlock.classList.remove('hidden');
-    gsap.fromTo(profileBlock,
+    gsap.fromTo(contentWrapper,
       { opacity: 0, y: -50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onUpdate: positionBelowProfile, onComplete: () => {
+      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
         profileBlock.classList.add('profile-appear');
         profileContainer.classList.add('orbit');
-        positionBelowProfile();
       }}
     );
     transparencySlider.dispatchEvent(new Event('input'));
@@ -111,13 +101,11 @@ document.addEventListener('DOMContentLoaded', () => {
     backgroundMusic.play().catch(err => {
       console.error("Failed to play music after start screen touch:", err);
     });
-    profileBlock.classList.remove('hidden');
-    gsap.fromTo(profileBlock,
+    gsap.fromTo(contentWrapper,
       { opacity: 0, y: -50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onUpdate: positionBelowProfile, onComplete: () => {
+      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
         profileBlock.classList.add('profile-appear');
         profileContainer.classList.add('orbit');
-        positionBelowProfile();
       }}
     );
     transparencySlider.dispatchEvent(new Event('input'));
