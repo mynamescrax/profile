@@ -786,6 +786,16 @@
         .ctrl-btn:hover {
             opacity: 0.6;
         }
+        #profile-outline {
+            position: fixed;
+            border: 3px solid white;
+            border-radius: 17px;
+            mix-blend-mode: difference;
+            pointer-events: none;
+            z-index: 4;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
     </style>
     <link href="assets/Retro Gaming.ttf" rel="stylesheet">
 </head>
@@ -904,6 +914,7 @@
             </div>
         </div>
         </div>
+        <div id="profile-outline"></div>
     </div>
 
 

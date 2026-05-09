@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const musicPlayerEl = document.getElementById('music-player');
   const topControlsEl = document.querySelector('.top-controls');
   const contentWrapper = document.getElementById('content-wrapper');
+  const profileOutline = document.getElementById('profile-outline');
 
   const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
@@ -110,6 +111,20 @@ document.addEventListener('DOMContentLoaded', () => {
   initializeVisitorCounter();
 
 
+  function startOutlineSync() {
+    profileOutline.style.opacity = '1';
+    const borderWidth = 3;
+    function sync() {
+      const rect = profileBlock.getBoundingClientRect();
+      profileOutline.style.top = (rect.top - borderWidth) + 'px';
+      profileOutline.style.left = (rect.left - borderWidth) + 'px';
+      profileOutline.style.width = (rect.width + borderWidth * 2) + 'px';
+      profileOutline.style.height = (rect.height + borderWidth * 2) + 'px';
+      requestAnimationFrame(sync);
+    }
+    sync();
+  }
+
   startScreen.addEventListener('click', () => {
     startScreen.classList.add('hidden');
     backgroundMusic.muted = false;
@@ -121,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
         profileBlock.classList.add('profile-appear');
         profileContainer.classList.add('orbit');
+        startOutlineSync();
       }}
     );
     transparencySlider.dispatchEvent(new Event('input'));
@@ -140,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
         profileBlock.classList.add('profile-appear');
         profileContainer.classList.add('orbit');
+        startOutlineSync();
       }}
     );
     transparencySlider.dispatchEvent(new Event('input'));
