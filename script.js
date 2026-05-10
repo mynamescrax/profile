@@ -1,5 +1,23 @@
 let hasUserInteracted = false;
 
+const songs = [
+  'assets/nuts.mp3',
+  'assets/homecoming.mp3',
+  'assets/blackbeatles.mp3',
+  'assets/worldsafuck.mp3'
+];
+let currentSongIndex = 0;
+
+function loadSong(index, autoPlay) {
+  const music = document.getElementById('background-music');
+  const art = document.querySelector('.player-art img');
+  const song = songs[index];
+  music.querySelector('source').src = song + '?v=1';
+  music.load();
+  if (art) art.src = song.replace('.mp3', '.png') + '?v=1';
+  if (autoPlay) music.addEventListener('canplay', () => music.play(), { once: true });
+}
+
 function initMedia() {
   console.log("initMedia called");
   const backgroundMusic = document.getElementById('background-music');
@@ -15,10 +33,14 @@ function initMedia() {
     'assets/background3.mp4',
     'assets/background4.mp4',
     'assets/background5.mp4',
+    'assets/background6.mp4',
   ];
   const chosen = backgrounds[Math.floor(Math.random() * backgrounds.length)];
   backgroundVideo.querySelector('source').src = chosen + '?v=1';
   backgroundVideo.load();
+
+  currentSongIndex = Math.floor(Math.random() * songs.length);
+  loadSong(currentSongIndex);
 
   backgroundMusic.volume = 0.3;
   backgroundVideo.muted = true;
@@ -502,8 +524,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  prevBtn.addEventListener('click', () => { backgroundMusic.currentTime = 0; });
-  nextBtn.addEventListener('click', () => { backgroundMusic.currentTime = 0; });
+  prevBtn.addEventListener('click', () => {
+    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    loadSong(currentSongIndex, !backgroundMusic.paused);
+  });
+  nextBtn.addEventListener('click', () => {
+    currentSongIndex = (currentSongIndex + 1) % songs.length;
+    loadSong(currentSongIndex, !backgroundMusic.paused);
+  });
 
   typeWriterStart();
 });
