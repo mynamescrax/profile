@@ -27,6 +27,12 @@ function initMedia() {
     return;
   }
 
+  const profilePics = ['assets/profile.gif', 'assets/profile2.gif', 'assets/profile3.gif'];
+  const profileImg = document.querySelector('.profile-picture');
+  if (profileImg) {
+    profileImg.src = profilePics[Math.floor(Math.random() * profilePics.length)] + '?v=1';
+  }
+
   const backgrounds = [
     'assets/background.mp4',
     'assets/background2.mp4',
