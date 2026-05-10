@@ -493,18 +493,80 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  musicProgress.addEventListener('mousedown', () => { musicProgress._seeking = true; });
-  musicProgress.addEventListener('touchstart', () => { musicProgress._seeking = true; });
+  let _seekFromTime = 0;
+  let _seekIsDragging = false;
+  let _seekMouseDownX = 0;
+  let _seekClickTarget = null;
+
+  function _applyProgressFill(val) {
+    const pct = (val / (backgroundMusic.duration || 1)) * 100;
+    musicProgress.style.background = `linear-gradient(to right, rgba(255,255,255,0.9) ${pct}%, rgba(255,255,255,0.25) ${pct}%)`;
+  }
+
+  musicProgress.addEventListener('mousedown', (e) => {
+    musicProgress._seeking = true;
+    _seekIsDragging = false;
+    _seekMouseDownX = e.clientX;
+    _seekFromTime = backgroundMusic.currentTime;
+    _seekClickTarget = null;
+  });
+  musicProgress.addEventListener('mousemove', (e) => {
+    if (musicProgress._seeking && !_seekIsDragging && Math.abs(e.clientX - _seekMouseDownX) > 4) {
+      _seekIsDragging = true;
+      if (_seekClickTarget !== null) {
+        musicProgress.value = _seekClickTarget;
+        currentTimeEl.textContent = formatTime(_seekClickTarget);
+        _applyProgressFill(_seekClickTarget);
+      }
+    }
+  });
+  musicProgress.addEventListener('touchstart', () => {
+    musicProgress._seeking = true;
+    _seekIsDragging = false;
+    _seekFromTime = backgroundMusic.currentTime;
+    _seekClickTarget = null;
+  });
+  musicProgress.addEventListener('touchmove', () => { _seekIsDragging = true; });
 
   musicProgress.addEventListener('input', () => {
-    currentTimeEl.textContent = formatTime(Number(musicProgress.value));
-    const pct = (musicProgress.value / (backgroundMusic.duration || 1)) * 100;
-    musicProgress.style.background = `linear-gradient(to right, rgba(255,255,255,0.9) ${pct}%, rgba(255,255,255,0.25) ${pct}%)`;
+    const val = Number(musicProgress.value);
+    if (_seekIsDragging) {
+      currentTimeEl.textContent = formatTime(val);
+      _applyProgressFill(val);
+    } else {
+      _seekClickTarget = val;
+      musicProgress.value = _seekFromTime;
+    }
   });
 
   musicProgress.addEventListener('change', () => {
-    backgroundMusic.currentTime = musicProgress.value;
-    musicProgress._seeking = false;
+    const targetTime = (!_seekIsDragging && _seekClickTarget !== null)
+      ? _seekClickTarget
+      : Number(musicProgress.value);
+    backgroundMusic.currentTime = targetTime;
+
+    if (!_seekIsDragging && _seekClickTarget !== null) {
+      const anim = { time: _seekFromTime };
+      gsap.to(anim, {
+        time: targetTime,
+        duration: 0.35,
+        ease: 'power2.inOut',
+        onUpdate: () => {
+          musicProgress.value = anim.time;
+          currentTimeEl.textContent = formatTime(anim.time);
+          _applyProgressFill(anim.time);
+        },
+        onComplete: () => {
+          musicProgress.value = targetTime;
+          updateProgressFill();
+          musicProgress._seeking = false;
+          _seekClickTarget = null;
+        }
+      });
+    } else {
+      musicProgress._seeking = false;
+      _seekClickTarget = null;
+    }
   });
 
   backgroundMusic.addEventListener('play', () => {
