@@ -8,9 +8,20 @@ function initMedia() {
     console.error("Media elements not found");
     return;
   }
+
+  const backgrounds = [
+    'assets/background.mp4',
+    'assets/background2.mp4',
+    'assets/background3.mp4',
+    'assets/background4.mp4',
+    'assets/background5.mp4',
+  ];
+  const chosen = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+  backgroundVideo.querySelector('source').src = chosen + '?v=1';
+  backgroundVideo.load();
+
   backgroundMusic.volume = 0.3;
   backgroundVideo.muted = true;
-
 
   backgroundVideo.play().catch(err => {
     console.error("Failed to play background video:", err);
