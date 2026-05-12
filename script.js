@@ -57,6 +57,7 @@ function initMedia() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  initMedia();
   const startScreen = document.getElementById('start-screen');
   const startText = document.getElementById('start-text');
   const profileName = document.getElementById('profile-name');
