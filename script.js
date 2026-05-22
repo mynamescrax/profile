@@ -73,18 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const profilePicture = document.querySelector('.profile-picture');
   const profileContainer = document.querySelector('.profile-container');
   const socialIcons = document.querySelectorAll('.social-icon');
-  const socialLinks = document.querySelectorAll('.social-links a');
-
-  socialLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      socialLinks.forEach(other => {
-        if (other !== link) {
-          other.style.pointerEvents = 'none';
-          other.style.opacity = '0.3';
-        }
-      });
-    });
-  });
   const badges = document.querySelectorAll('.badge');
 
   const musicPlayerEl = document.getElementById('music-player');
