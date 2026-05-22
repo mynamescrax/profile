@@ -363,9 +363,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   function handleTilt(e, element) {
-    const rect = element.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
     let clientX, clientY;
 
     if (e.type === 'touchmove') {
@@ -380,15 +379,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const mouseY = clientY - centerY;
 
     const maxTilt = 15;
-    const tiltX = (mouseY / rect.height) * maxTilt;
-    const tiltY = -(mouseX / rect.width) * maxTilt;
+    const tiltX = (mouseY / (window.innerHeight / 2)) * maxTilt;
+    const tiltY = -(mouseX / (window.innerWidth / 2)) * maxTilt;
 
     gsap.to(element, {
       rotationX: tiltX,
       rotationY: tiltY,
       duration: 0.3,
       ease: 'power2.out',
-      transformPerspective: 1000
+      transformPerspective: 1000,
+      overwrite: 'auto'
     });
   }
 
@@ -405,7 +405,8 @@ document.addEventListener('DOMContentLoaded', () => {
       xPercent: -50,
       yPercent: -50,
       duration: 0.5,
-      ease: 'power2.out'
+      ease: 'power2.out',
+      overwrite: 'auto'
     });
   });
   contentWrapper.addEventListener('touchend', () => {
@@ -415,7 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
       xPercent: -50,
       yPercent: -50,
       duration: 0.5,
-      ease: 'power2.out'
+      ease: 'power2.out',
+      overwrite: 'auto'
     });
   });
 
