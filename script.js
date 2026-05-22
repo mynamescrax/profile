@@ -185,44 +185,24 @@ document.addEventListener('DOMContentLoaded', () => {
     frame();
   }
 
-  startScreen.addEventListener('click', () => {
+  function unlockPage() {
     startScreen.classList.add('hidden');
     backgroundMusic.muted = false;
-    backgroundMusic.play().catch(err => {
-      console.error("Failed to play music after start screen click:", err);
-    });
+    backgroundMusic.play().catch(() => {});
     startOutlineSync();
     gsap.fromTo(contentWrapper,
-      { opacity: 0, y: -50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
-        profileBlock.classList.add('profile-appear');
+      { opacity: 0, y: -50, xPercent: -50, yPercent: -50 },
+      { opacity: 1, y: 0, xPercent: -50, yPercent: -50, duration: 1, ease: 'power2.out', onComplete: () => {
         profileContainer.classList.add('orbit');
       }}
     );
     transparencySlider.dispatchEvent(new Event('input'));
     typeWriterName();
     typeWriterBio();
-  });
+  }
 
-  startScreen.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    startScreen.classList.add('hidden');
-    backgroundMusic.muted = false;
-    backgroundMusic.play().catch(err => {
-      console.error("Failed to play music after start screen touch:", err);
-    });
-    startOutlineSync();
-    gsap.fromTo(contentWrapper,
-      { opacity: 0, y: -50 },
-      { opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
-        profileBlock.classList.add('profile-appear');
-        profileContainer.classList.add('orbit');
-      }}
-    );
-    transparencySlider.dispatchEvent(new Event('input'));
-    typeWriterName();
-    typeWriterBio();
-  });
+  startScreen.addEventListener('click', unlockPage);
+  startScreen.addEventListener('touchstart', (e) => { e.preventDefault(); unlockPage(); });
 
 
   const name = "crax";
@@ -422,6 +402,8 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.to(contentWrapper, {
       rotationX: 0,
       rotationY: 0,
+      xPercent: -50,
+      yPercent: -50,
       duration: 0.5,
       ease: 'power2.out'
     });
@@ -430,6 +412,8 @@ document.addEventListener('DOMContentLoaded', () => {
     gsap.to(contentWrapper, {
       rotationX: 0,
       rotationY: 0,
+      xPercent: -50,
+      yPercent: -50,
       duration: 0.5,
       ease: 'power2.out'
     });
