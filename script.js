@@ -1,5 +1,3 @@
-let hasUserInteracted = false;
-
 const songs = [
   'assets/nuts.mp3',
   'assets/homecoming.mp3',
@@ -73,15 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const profilePicture = document.querySelector('.profile-picture');
   const profileContainer = document.querySelector('.profile-container');
   const socialIcons = document.querySelectorAll('.social-icon');
-  const badges = document.querySelectorAll('.badge');
 
   const musicPlayerEl = document.getElementById('music-player');
   const topControlsEl = document.querySelector('.top-controls');
   const contentWrapper = document.getElementById('content-wrapper');
   const profileOutline = document.getElementById('profile-outline');
-
-  const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-
 
   const startMessage = "Click here to see me bbg 😘😘";
   let startTextContent = '';
@@ -325,10 +319,6 @@ document.addEventListener('DOMContentLoaded', () => {
         icon.style.pointerEvents = 'auto';
         icon.style.opacity = '1';
       });
-      badges.forEach(badge => {
-        badge.style.pointerEvents = 'auto';
-        badge.style.opacity = '1';
-      });
       profilePicture.style.pointerEvents = 'auto';
       profilePicture.style.opacity = '1';
       profileName.style.opacity = '1';
@@ -348,10 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
       socialIcons.forEach(icon => {
         icon.style.pointerEvents = 'auto';
         icon.style.opacity = '1';
-      });
-      badges.forEach(badge => {
-        badge.style.pointerEvents = 'auto';
-        badge.style.opacity = '1';
       });
       profilePicture.style.pointerEvents = 'auto';
       profilePicture.style.opacity = '1';
