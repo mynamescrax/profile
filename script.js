@@ -10,9 +10,9 @@ function loadSong(index, autoPlay) {
   const music = document.getElementById('background-music');
   const art = document.querySelector('.player-art img');
   const song = songs[index];
-  music.querySelector('source').src = song + '?v=1';
+  music.querySelector('source').src = song + '?v=2';
   music.load();
-  if (art) art.src = song.replace('.mp3', '.png') + '?v=1';
+  if (art) art.src = song.replace('.mp3', '.png') + '?v=2';
   if (autoPlay) music.addEventListener('canplay', () => music.play(), { once: true });
 }
 
@@ -28,7 +28,7 @@ function initMedia() {
   const profilePics = ['assets/profile.gif', 'assets/profile3.gif'];
   const profileImg = document.querySelector('.profile-picture');
   if (profileImg) {
-    profileImg.src = profilePics[Math.floor(Math.random() * profilePics.length)] + '?v=1';
+    profileImg.src = profilePics[Math.floor(Math.random() * profilePics.length)] + '?v=2';
   }
 
   const backgrounds = [
@@ -40,7 +40,7 @@ function initMedia() {
     'assets/background6.mp4',
   ];
   const chosen = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-  backgroundVideo.querySelector('source').src = chosen + '?v=1';
+  backgroundVideo.querySelector('source').src = chosen + '?v=2';
   backgroundVideo.load();
 
   currentSongIndex = Math.floor(Math.random() * songs.length);
