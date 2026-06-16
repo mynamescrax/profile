@@ -38,7 +38,7 @@ function initMedia() {
     'assets/background4.mp4',
     'assets/background5.mp4',
     'assets/background6.mp4',
-    'assets/background8.gif',
+    'assets/background8.mp4',
     'assets/background9.mov',
   ];
   const chosen = backgrounds[Math.floor(Math.random() * backgrounds.length)];
