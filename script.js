@@ -38,7 +38,6 @@ function initMedia() {
     'assets/background4.mp4',
     'assets/background5.mp4',
     'assets/background6.mp4',
-    'assets/background7.gif',
     'assets/background8.gif',
     'assets/background9.mov',
   ];
