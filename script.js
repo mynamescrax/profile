@@ -239,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
     "n1 skidder oat",
     "\"Hello, World!\"",
     "top paster",
-    "\"nigger\""
+    "\"larp larp larp sahur\""
   ];
   let bioText = '';
   let bioIndex = 0;
