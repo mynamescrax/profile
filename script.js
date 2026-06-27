@@ -17,7 +17,6 @@ function loadSong(index, autoPlay) {
 }
 
 function initMedia() {
-  console.log("initMedia called");
   const backgroundMusic = document.getElementById('background-music');
   const backgroundVideo = document.getElementById('background');
   if (!backgroundMusic || !backgroundVideo) {
@@ -36,7 +35,7 @@ function initMedia() {
     'assets/background4.mp4',
     'assets/background5.mp4',
     'assets/background6.mp4',
-    'assets/background9.mov',
+    'assets/background9.mp4',
   ];
   const chosen = backgrounds[Math.floor(Math.random() * backgrounds.length)];
   backgroundVideo.querySelector('source').src = chosen + '?v=5';
@@ -185,9 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startOutlineSync();
     gsap.fromTo(contentWrapper,
       { opacity: 0, y: -50, xPercent: -50, yPercent: -50 },
-      { opacity: 1, y: 0, xPercent: -50, yPercent: -50, duration: 1, ease: 'power2.out', onComplete: () => {
-        profileContainer.classList.add('orbit');
-      }}
+      { opacity: 1, y: 0, xPercent: -50, yPercent: -50, duration: 1, ease: 'power2.out' }
     );
     transparencySlider.dispatchEvent(new Event('input'));
     typeWriterName();
@@ -417,26 +414,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   profilePicture.addEventListener('click', () => {
     profileContainer.classList.remove('fast-orbit');
-    profileContainer.classList.remove('orbit');
     void profileContainer.offsetWidth;
     profileContainer.classList.add('fast-orbit');
     setTimeout(() => {
       profileContainer.classList.remove('fast-orbit');
-      void profileContainer.offsetWidth;
-      profileContainer.classList.add('orbit');
     }, 500);
   });
 
   profilePicture.addEventListener('touchstart', (e) => {
     e.preventDefault();
     profileContainer.classList.remove('fast-orbit');
-    profileContainer.classList.remove('orbit');
     void profileContainer.offsetWidth;
     profileContainer.classList.add('fast-orbit');
     setTimeout(() => {
       profileContainer.classList.remove('fast-orbit');
-      void profileContainer.offsetWidth;
-      profileContainer.classList.add('orbit');
     }, 500);
   });
 
