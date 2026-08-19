@@ -1,9 +1,15 @@
 const songs = [
   'assets/nuts.mp3',
   'assets/blackbeatles.mp3',
-  'assets/worldsafuck.mp3'
+  'assets/worldsafuck.mp3',
+  'assets/священная-война.mp3'
 ];
 let currentSongIndex = 0;
+
+if ('scrollRestoration' in history) {
+  history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
 
 const nextAudio = new Audio();
 
@@ -61,6 +67,8 @@ function initMedia() {
 
 const ICON_SOUND = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>';
 const ICON_MUTED = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>';
+
+gsap.registerPlugin(ScrollTrigger);
 
 document.addEventListener('DOMContentLoaded', () => {
   initMedia();
@@ -187,11 +195,68 @@ document.addEventListener('DOMContentLoaded', () => {
     frame();
   }
 
+  function initScrollAnimations() {
+    const hero = document.querySelector('.container');
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    const heading = document.querySelector('.section-heading');
+
+    gsap.to(scrollIndicator, {
+      opacity: 0,
+      y: -30,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: hero,
+        start: 'top top',
+        end: '20% top',
+        scrub: true
+      }
+    });
+
+    gsap.fromTo(contentWrapper,
+      { y: 0, scale: 1, opacity: 1 },
+      {
+        y: 60,
+        scale: 0.85,
+        opacity: 0.3,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      }
+    );
+
+    gsap.from(heading, {
+      y: 40,
+      opacity: 0,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: heading, start: 'top 90%' }
+    });
+
+    gsap.utils.toArray('.project-card').forEach((card, i) => {
+      gsap.from(card, {
+        y: 20,
+        opacity: 0,
+        duration: 0.7,
+        ease: 'power2.out',
+        delay: i * 0.08,
+        scrollTrigger: { trigger: '.projects-grid', start: 'top 80%', toggleActions: 'play none none reverse' }
+      });
+    });
+
+    ScrollTrigger.refresh();
+  }
+
   function unlockPage() {
     startScreen.classList.add('hidden');
+    document.body.style.overflowY = 'auto';
     backgroundMusic.muted = false;
     safePlay(backgroundMusic);
     startOutlineSync();
+    initScrollAnimations();
     gsap.fromTo(contentWrapper,
       { opacity: 0, y: -50, xPercent: -50, yPercent: -50 },
       { opacity: 1, y: 0, xPercent: -50, yPercent: -50, duration: 1, ease: 'power2.out' }
@@ -242,10 +307,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const bioMessages = [
-    "n1 skidder oat",
-    "\"Hello, World!\"",
-    "top paster",
-    "\"larp larp larp sahur\""
+  "n1 skid oat",
+  "\"Hello, World!\"",
+  "top paster",
+  "\"larp larp larp sahur\"",
+  "\"works fine for me\"",
+  "git clone",
+  "\"ill fix it later\"",
   ];
   let bioText = '';
   let bioIndex = 0;
@@ -376,7 +444,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   contentWrapper.addEventListener('mousemove', (e) => handleTilt(e, contentWrapper));
   contentWrapper.addEventListener('touchmove', (e) => {
-    e.preventDefault();
     handleTilt(e, contentWrapper);
   });
 
@@ -412,23 +479,104 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
+  function roundedRectPath(host) {
+    const inset = 2;
+    const w = host.offsetWidth + inset * 2;
+    const h = host.offsetHeight + inset * 2;
+    const cs = getComputedStyle(host);
+    let rx, ry;
+    if (cs.borderRadius.includes('%')) {
+      const p = parseFloat(cs.borderRadius) / 100;
+      rx = w * p;
+      ry = h * p;
+    } else {
+      const r = parseFloat(cs.borderRadius) || 0;
+      rx = ry = Math.min(r, Math.min(w, h) / 2);
+    }
+    const pts = [];
+    const arc = (cx, cy, a0, a1) => {
+      for (let k = 0; k <= 6; k++) {
+        const a = a0 + (a1 - a0) * k / 6;
+        pts.push({ x: cx + rx * Math.cos(a), y: cy + ry * Math.sin(a) });
+      }
+    };
+    arc(rx, ry, Math.PI, Math.PI * 1.5);
+    pts.push({ x: w - rx, y: 0 });
+    arc(w - rx, ry, -Math.PI / 2, 0);
+    pts.push({ x: w, y: h - ry });
+    arc(w - rx, h - ry, 0, Math.PI / 2);
+    pts.push({ x: rx, y: h });
+    arc(rx, h - ry, Math.PI / 2, Math.PI);
+    pts.push({ x: 0, y: ry });
+    return pts;
+  }
+
+  function buildOrbit(ring, duration, repeat) {
+    if (ring._tl) ring._tl.kill();
+    const line = ring.querySelector('.orbit-line');
+    const raw = roundedRectPath(ring.parentElement);
+    const pts = [];
+    for (let i = 0; i < raw.length; i++) {
+      const p = raw[i];
+      const prev = pts.length ? pts[pts.length - 1] : raw[raw.length - 1];
+      if (Math.hypot(p.x - prev.x, p.y - prev.y) > 0.5) pts.push(p);
+    }
+    const n = pts.length;
+    const dirs = [];
+    const lens = [];
+    let total = 0;
+    for (let j = 0; j < n; j++) {
+      const a = pts[j];
+      const b = pts[(j + 1) % n];
+      const L = Math.hypot(b.x - a.x, b.y - a.y);
+      lens.push(L);
+      total += L;
+      dirs.push(Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI);
+    }
+    const arrivalAngle = (j) => {
+      const d1 = dirs[j];
+      const d2 = dirs[(j + 1) % n];
+      let diff = d2 - d1;
+      while (diff > 180) diff -= 360;
+      while (diff < -180) diff += 360;
+      return d1 + diff / 2;
+    };
+    let startAngle = arrivalAngle(n - 1);
+    const speed = total / duration;
+    gsap.set(line, { x: pts[0].x, y: pts[0].y, rotation: startAngle });
+    const tl = gsap.timeline({
+      repeat: repeat,
+      onComplete: repeat === 0 ? () => buildOrbit(ring, 3, -1) : null,
+      defaults: { ease: 'none' }
+    });
+    for (let j = 0; j < n; j++) {
+      const b = pts[(j + 1) % n];
+      tl.to(line, {
+        x: b.x,
+        y: b.y,
+        rotation: arrivalAngle(j),
+        duration: Math.max(lens[j], 0.0001) / speed
+      }, j === 0 ? 0 : '>');
+    }
+    ring._tl = tl;
+  }
+
+  function snapSpin(ring) {
+    buildOrbit(ring, 0.5, 0);
+  }
+
+  document.querySelectorAll('.orbit-ring').forEach(ring => buildOrbit(ring, ring.closest('#music-player') ? 6 : 3, -1));
+  window.addEventListener('resize', () => {
+    document.querySelectorAll('.orbit-ring').forEach(ring => buildOrbit(ring, ring.closest('#music-player') ? 6 : 3, -1));
+  });
+
   profilePicture.addEventListener('click', () => {
-    profileContainer.classList.remove('fast-orbit');
-    void profileContainer.offsetWidth;
-    profileContainer.classList.add('fast-orbit');
-    setTimeout(() => {
-      profileContainer.classList.remove('fast-orbit');
-    }, 500);
+    snapSpin(profileContainer.querySelector('.orbit-ring'));
   });
 
   profilePicture.addEventListener('touchstart', (e) => {
     e.preventDefault();
-    profileContainer.classList.remove('fast-orbit');
-    void profileContainer.offsetWidth;
-    profileContainer.classList.add('fast-orbit');
-    setTimeout(() => {
-      profileContainer.classList.remove('fast-orbit');
-    }, 500);
+    snapSpin(profileContainer.querySelector('.orbit-ring'));
   });
 
 

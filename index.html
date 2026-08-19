@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,6 +10,10 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Courier New', monospace;
+        }
+
+        html {
+            scroll-snap-type: y mandatory;
         }
 
         body {
@@ -114,11 +118,12 @@
             padding: 8px 12px;
             border-radius: 20px;
             backdrop-filter: blur(5px);
+            position: relative;
         }
 
 
         #content-wrapper {
-            position: fixed;
+            position: absolute;
             top: 50%;
             left: 50%;
             display: flex;
@@ -157,29 +162,34 @@
             position: relative;
             width: 150px;
             height: 150px;
+            border-radius: 50%;
         }
 
-        .profile-container::after {
-            content: '';
+        .orbit-ring {
             position: absolute;
             top: -2px;
             left: -2px;
             right: -2px;
             bottom: -2px;
-            border-radius: 50%;
-            background: radial-gradient(
-                circle at 10px 10px,
-                white 10%,
-                transparent 15%
-            );
-            animation: orbit 3s linear infinite;
             z-index: 0;
-            filter: blur(1px);
-            box-shadow: none;
+            pointer-events: none;
         }
 
-        .profile-container.fast-orbit::after {
-            animation: fast-orbit 0.5s linear forwards;
+        .orbit-line {
+            position: absolute;
+            left: -7px;
+            top: -1px;
+            width: 14px;
+            height: 2px;
+            border-radius: 2px;
+            background: #fff;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 0.9);
+            will-change: transform;
+        }
+
+        #music-player .orbit-line {
+            left: -12px;
+            width: 24px;
         }
 
         .profile-picture {
@@ -366,24 +376,6 @@
             }
         }
 
-        @keyframes orbit {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes fast-orbit {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
         #start-screen {
             position: fixed;
             top: 0;
@@ -418,6 +410,7 @@
             gap: 14px;
             width: 820px;
             color: white;
+            position: relative;
         }
 
         .player-art {
@@ -626,6 +619,180 @@
             z-index: 4;
             opacity: 0;
         }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+        }
+
+        .scroll-mouse {
+            width: 24px;
+            height: 38px;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            border-radius: 14px;
+            position: relative;
+        }
+
+        .scroll-mouse::after {
+            content: '';
+            position: absolute;
+            top: 7px;
+            left: 50%;
+            width: 4px;
+            height: 8px;
+            margin-left: -2px;
+            border-radius: 2px;
+            background: #fff;
+            animation: scroll-wheel 1.6s ease-in-out infinite;
+        }
+
+        .scroll-text {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes scroll-wheel {
+            0% { transform: translateY(0); opacity: 1; }
+            70% { transform: translateY(14px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 0; }
+        }
+
+        #projects {
+            position: relative;
+            z-index: 5;
+            max-width: 900px;
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 60px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        .container {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        .section-heading {
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 30px;
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+        }
+
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+            margin-top: 12px;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .project-card {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            text-decoration: none;
+            color: #fff;
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+        }
+
+        .project-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .project-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+            flex-shrink: 0;
+        }
+
+        .project-title {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+        }
+
+        .project-desc {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.7);
+            flex: 1;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .project-tags span {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.85);
+            letter-spacing: 1px;
+        }
+
+        @media (max-width: 760px) {
+            html {
+                scroll-snap-type: y proximity;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .scroll-indicator {
+                bottom: 20px;
+            }
+
+            #projects {
+                padding: 40px 20px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -644,11 +811,18 @@
         <div class="glitch-overlay"></div>
 
 
+        <div class="scroll-indicator">
+            <div class="scroll-mouse"></div>
+            <span class="scroll-text">SCROLL</span>
+        </div>
+
+
         <div id="content-wrapper">
         <svg id="profile-outline"><rect fill="none" stroke="white" stroke-width="1.5" rx="15" ry="15"/></svg>
         <div id="profile-block">
             <div class="profile-header">
                 <div class="profile-container">
+                    <span class="orbit-ring"><span class="orbit-line"></span></span>
                     <img src="" alt="Profile" class="profile-picture">
                 </div>
                 <div class="profile-info">
@@ -703,6 +877,7 @@
 
 
         <div id="music-player">
+            <span class="orbit-ring"><span class="orbit-line"></span></span>
             <div class="player-art">
                 <img src="assets/homecoming.png" alt="Album Art" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
             </div>
@@ -725,6 +900,7 @@
         </div>
 
         <div class="top-controls">
+            <span class="orbit-ring"><span class="orbit-line"></span></span>
             <div class="volume-control">
                 <svg id="volume-icon" class="volume-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
@@ -743,12 +919,44 @@
     </div>
 
 
-    <audio id="background-music" loop>
+    <section id="projects">
+        <h2 class="section-heading">// projects_</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-top">
+                    <span class="project-dot"></span>
+                    <span class="project-title">il2csharp</span>
+                </div>
+                <p class="project-desc">wip tool to convert il2cpp straight to c#</p>
+                <div class="project-tags"><span>wip</span><span>c#</span><span>il2cpp</span></div>
+            </div>
+            <a class="project-card" href="https://gpt.crax.lol" target="_blank">
+                <div class="project-top">
+                    <span class="project-dot"></span>
+                    <span class="project-title">craxgpt</span>
+                </div>
+                <p class="project-desc">free ai wrapper site, no limits</p>
+                <div class="project-tags"><span>ai</span><span>gpt</span><span>free</span></div>
+            </a>
+            <a class="project-card" href="https://aetheris.win" target="_blank">
+                <div class="project-top">
+                    <span class="project-dot"></span>
+                    <span class="project-title">aetheris</span>
+                </div>
+                <p class="project-desc">unblocked games site</p>
+                <div class="project-tags"><span>games</span><span>unblocked</span></div>
+            </a>
+        </div>
+    </section>
+
+
+    <audio id="background-music">
         <source src="" type="audio/mp3">
     </audio>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
 
     <script src="script.js?v=6"></script>
