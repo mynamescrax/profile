@@ -2,7 +2,17 @@ const songs = [
   'assets/nuts.mp3',
   'assets/blackbeatles.mp3',
   'assets/worldsafuck.mp3',
-  'assets/священная-война.mp3'
+  'assets/священная-война.mp3',
+  'assets/arkpatrol-letgo.mp3',
+  'assets/avamax-sweetbutpsycho.mp3',
+  'assets/chiefkeef-idontlike.mp3',
+  'assets/chiefkeef-saveme.mp3',
+  'assets/edwardmaya-stereolove.mp3',
+  'assets/laughin-to-the-bank.mp3',
+  'assets/lilgodan-marceline.mp3',
+  'assets/lisa-money.mp3',
+  'assets/playboicarti-rip.mp3',
+  'assets/trefuego-90mh.mp3'
 ];
 let currentSongIndex = 0;
 
@@ -29,7 +39,7 @@ function loadSong(index, autoPlay) {
   const song = songs[index];
   music.querySelector('source').src = song + '?v=6';
   music.load();
-  if (art) art.src = song.replace('.mp3', '.png') + '?v=6';
+  if (art) art.src = song.replace('.mp3', '.webp') + '?v=6';
   if (autoPlay) music.addEventListener('canplay', () => safePlay(music), { once: true });
   preloadNextSong();
 }
@@ -42,7 +52,7 @@ function initMedia() {
     return;
   }
 
-  const profilePics = ['assets/profile2.gif', 'assets/profile4.gif', 'assets/profile3.gif'];
+  const profilePics = ['assets/profile2.webp', 'assets/profile4.webp', 'assets/profile3.webp'];
   const profileImg = document.querySelector('.profile-picture');
   if (profileImg) {
     profileImg.src = profilePics[Math.floor(Math.random() * profilePics.length)] + '?v=6';
