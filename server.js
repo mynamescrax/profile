@@ -6,16 +6,44 @@ const VIEWS_FILE = path.join(__dirname, 'views.json');
 const DAY_MS = 24 * 60 * 60 * 1000;
 const seenIPs = new Map();
 
-async function getViews() {
+// The count lives in memory and is written through a single serialized queue,
+// so concurrent requests can't clobber each other or read a half-written file.
+let count = 0;
+let writing = Promise.resolve();
+
+async function loadCount() {
   try {
-    return JSON.parse(await fs.readFile(VIEWS_FILE, 'utf8')).count;
+    const parsed = JSON.parse(await fs.readFile(VIEWS_FILE, 'utf8'));
+    count = Number(parsed.count) || 0;
   } catch {
-    return 0;
+    count = 0;
   }
 }
 
-async function saveViews(count) {
-  await fs.writeFile(VIEWS_FILE, JSON.stringify({ count }));
+function persist() {
+  writing = writing
+    .then(async () => {
+      const tmp = `${VIEWS_FILE}.${process.pid}.tmp`;
+      await fs.writeFile(tmp, JSON.stringify({ count }));
+      await fs.rename(tmp, VIEWS_FILE); // atomic replace
+    })
+    .catch((err) => console.error('views: save failed', err));
+  return writing;
+}
+
+// Caddy terminates TLS and proxies to loopback, so the real address is the one
+// it forwards: Cloudflare's edge-supplied client IP when the peer is a CF edge,
+// otherwise the direct peer. The socket address here is always 127.0.0.1.
+function clientIP(req) {
+  const raw = (req.headers['x-real-ip'] || req.socket.remoteAddress || '').trim();
+  return raw.replace(/^::ffff:/, '').replace(/%.*$/, '').toLowerCase() || 'unknown';
+}
+
+function send(res, status, body) {
+  res.statusCode = status;
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Cache-Control', 'no-store');
+  res.end(JSON.stringify(body));
 }
 
 setInterval(() => {
@@ -23,35 +51,33 @@ setInterval(() => {
   for (const [ip, ts] of seenIPs) {
     if (ts < cutoff) seenIPs.delete(ip);
   }
-}, 60 * 60 * 1000);
+}, 60 * 60 * 1000).unref();
 
-const server = http.createServer(async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Content-Type', 'application/json');
-
+const server = http.createServer((req, res) => {
   if (req.method === 'POST' && req.url === '/api/views') {
-    try {
-      const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket.remoteAddress;
-      const now = Date.now();
-      const last = seenIPs.get(ip);
-      let count = await getViews();
-      if (!last || now - last > DAY_MS) {
-        count++;
-        await saveViews(count);
-        seenIPs.set(ip, now);
-      }
-      res.end(JSON.stringify({ count }));
-    } catch (err) {
-      console.error(err);
-      res.statusCode = 500;
-      res.end('{}');
+    const ip = clientIP(req);
+    const now = Date.now();
+    const last = seenIPs.get(ip);
+    if (!last || now - last > DAY_MS) {
+      seenIPs.set(ip, now);
+      count += 1;
+      persist();
     }
-  } else {
-    res.statusCode = 404;
-    res.end('{}');
+    send(res, 200, { count });
+    return;
   }
+
+  send(res, 404, {});
 });
 
-server.listen(3001, '127.0.0.1', () => {
-  console.log('Views server on :3001');
+for (const signal of ['SIGINT', 'SIGTERM']) {
+  process.on(signal, () => {
+    writing.finally(() => process.exit(0));
+  });
+}
+
+loadCount().then(() => {
+  server.listen(3001, '127.0.0.1', () => {
+    console.log(`Views server on :3001 (${count} views)`);
+  });
 });
