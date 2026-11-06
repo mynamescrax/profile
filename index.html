@@ -692,6 +692,17 @@
             100% { transform: translateY(0); opacity: 0; }
         }
 
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-snap-type: none;
+            }
+
+            .scroll-mouse::after,
+            .glitch {
+                animation: none;
+            }
+        }
+
         #projects {
             position: relative;
             z-index: 5;
@@ -979,7 +990,7 @@
 
     <script defer src="assets/vendor/gsap.min.js"></script>
     <script defer src="assets/vendor/ScrollTrigger.min.js"></script>
-    <script defer src="script.js?v=8"></script>
+    <script defer src="script.js?v=9"></script>
 </body>
 </html>
 
