@@ -4,13 +4,10 @@ const songs = [
   'assets/worldsafuck.mp3',
   'assets/священная-война.mp3',
   'assets/arkpatrol-letgo.mp3',
-  'assets/avamax-sweetbutpsycho.mp3',
   'assets/chiefkeef-idontlike.mp3',
   'assets/chiefkeef-saveme.mp3',
-  'assets/edwardmaya-stereolove.mp3',
   'assets/laughin-to-the-bank.mp3',
   'assets/lilgodan-marceline.mp3',
-  'assets/lisa-money.mp3',
   'assets/playboicarti-rip.mp3',
   'assets/trefuego-90mh.mp3'
 ];
