@@ -10,8 +10,9 @@
     <meta property="og:title" content="crax">
     <meta property="og:description" content="crax - profile, projects and whatever I'm working on.">
     <meta property="og:url" content="https://crax.lol/">
-    <meta property="og:image" content="https://crax.lol/assets/profile2.webp?v=7">
+    <meta property="og:image" content="https://crax.lol/assets/profile2.webp?v=8">
     <meta name="twitter:card" content="summary">
+    <link rel="preload" href="assets/Angel_wish.woff2?v=8" as="font" type="font/woff2" crossorigin>
     <style>
         * {
             margin: 0;
@@ -243,9 +244,10 @@
         
         @font-face {
             font-family: 'Angel Wish';
-            src: url('assets/Angel_wish.ttf?v=7') format('truetype');
+            src: url('assets/Angel_wish.woff2?v=8') format('woff2');
             font-weight: normal;
             font-style: normal;
+            font-display: swap;
         }
 
         #profile-name {
@@ -826,7 +828,7 @@
 
     <div class="container">
         
-        <video id="background" autoplay loop muted playsinline webkit-playsinline preload="none">
+        <video id="background" autoplay loop muted playsinline webkit-playsinline preload="none" poster="assets/background9-poster.webp?v=8">
             <source type="video/mp4">
         </video>
 
@@ -865,19 +867,19 @@
 
                 <div class="social-links">
                     <a href="https://discord.com/users/1327961337757831219" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/discord.webp?v=7" alt="Discord" class="social-icon">
+                        <img src="assets/discord.webp?v=8" alt="Discord" class="social-icon">
                     </a>
                     <a href="https://github.com/mynamescrax" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/github.webp?v=7" alt="GitHub" class="social-icon">
+                        <img src="assets/github.webp?v=8" alt="GitHub" class="social-icon">
                     </a>
                     <a href="https://t.me/craxlarps" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/telegram.webp?v=7" alt="Telegram" class="social-icon">
+                        <img src="assets/telegram.webp?v=8" alt="Telegram" class="social-icon">
                     </a>
                     <a href="https://www.youtube.com/@imcrax" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/youtube.webp?v=7" alt="YouTube" class="social-icon">
+                        <img src="assets/youtube.webp?v=8" alt="YouTube" class="social-icon">
                     </a>
                     <a href="https://www.tiktok.com/@crax.ae" target="_blank" rel="noopener noreferrer">
-                        <img src="assets/tiktok.webp?v=7" alt="TikTok" class="social-icon">
+                        <img src="assets/tiktok.webp?v=8" alt="TikTok" class="social-icon">
                     </a>
                 </div>
 
@@ -899,7 +901,7 @@
         <div id="music-player">
             <span class="orbit-ring"><span class="orbit-line"></span></span>
             <div class="player-art">
-                <img src="assets/homecoming.webp?v=7" alt="Album Art" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+                <img src="assets/homecoming.webp?v=8" alt="Album Art" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
             </div>
             <span id="current-time">0:00</span>
             <div id="progress-container">
@@ -977,7 +979,7 @@
 
     <script defer src="assets/vendor/gsap.min.js"></script>
     <script defer src="assets/vendor/ScrollTrigger.min.js"></script>
-    <script defer src="script.js?v=7"></script>
+    <script defer src="script.js?v=8"></script>
 </body>
 </html>
 

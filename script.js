@@ -12,7 +12,7 @@ const songs = [
 ];
 let currentSongIndex = 0;
 
-const ASSET_VERSION = '7';
+const ASSET_VERSION = '8';
 const SAVE_DATA = !!(navigator.connection && navigator.connection.saveData);
 let allowPreload = false;
 
@@ -75,7 +75,9 @@ function initMedia() {
 function startMedia() {
   const backgroundMusic = document.getElementById('background-music');
   const backgroundVideo = document.getElementById('background');
-  const backgrounds = ['assets/background9.mp4'];
+  const backgrounds = window.matchMedia('(max-width: 760px)').matches
+    ? ['assets/background9-540.mp4']
+    : ['assets/background9.mp4'];
   const chosen = backgrounds[Math.floor(Math.random() * backgrounds.length)];
 
   const source = backgroundVideo.querySelector('source');
