@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>crax's shit</title>
+    <meta name="description" content="crax - profile, projects and whatever I'm working on.">
+    <meta name="theme-color" content="#000000">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="crax">
+    <meta property="og:description" content="crax - profile, projects and whatever I'm working on.">
+    <meta property="og:url" content="https://crax.lol/">
+    <meta property="og:image" content="https://crax.lol/assets/profile2.webp?v=7">
+    <meta name="twitter:card" content="summary">
     <style>
         * {
             margin: 0;
@@ -60,6 +68,21 @@
 
         .hidden {
             display: none !important;
+        }
+
+        :focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 3px;
+        }
+
+        #start-screen:focus-visible {
+            outline: none;
+        }
+
+        .slider:focus-visible,
+        #music-progress:focus-visible {
+            outline: 2px solid #fff;
+            outline-offset: 4px;
         }
 
         .volume-control {
@@ -220,7 +243,7 @@
         
         @font-face {
             font-family: 'Angel Wish';
-            src: url('assets/Angel_wish.ttf') format('truetype');
+            src: url('assets/Angel_wish.ttf?v=7') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
@@ -797,14 +820,14 @@
 </head>
 <body>
     
-    <div id="start-screen">
+    <div id="start-screen" role="button" tabindex="0" aria-label="Enter site">
         <div id="start-text"></div>
     </div>
 
     <div class="container">
         
-        <video id="background" autoplay loop muted playsinline webkit-playsinline>
-            <source src="" type="video/mp4">
+        <video id="background" autoplay loop muted playsinline webkit-playsinline preload="none">
+            <source type="video/mp4">
         </video>
 
 
@@ -823,7 +846,7 @@
             <div class="profile-header">
                 <div class="profile-container">
                     <span class="orbit-ring"><span class="orbit-line"></span></span>
-                    <img loading="lazy" src="" alt="Profile" class="profile-picture">
+                    <img alt="Profile" class="profile-picture">
                 </div>
                 <div class="profile-info">
                     <div class="name-and-badges">
@@ -841,20 +864,20 @@
             <div class="profile-footer">
 
                 <div class="social-links">
-                    <a href="https://discord.com/users/1327961337757831219" target="_blank">
-                        <img loading="lazy" src="assets/discord.webp" alt="Discord" class="social-icon">
+                    <a href="https://discord.com/users/1327961337757831219" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/discord.webp?v=7" alt="Discord" class="social-icon">
                     </a>
-                    <a href="https://github.com/mynamescrax" target="_blank">
-                        <img loading="lazy" src="assets/github.webp" alt="GitHub" class="social-icon">
+                    <a href="https://github.com/mynamescrax" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/github.webp?v=7" alt="GitHub" class="social-icon">
                     </a>
-                    <a href="https://t.me/craxlarps" target="_blank">
-                        <img loading="lazy" src="assets/telegram.webp" alt="Telegram" class="social-icon">
+                    <a href="https://t.me/craxlarps" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/telegram.webp?v=7" alt="Telegram" class="social-icon">
                     </a>
-                    <a href="https://www.youtube.com/@imcrax" target="_blank">
-                        <img loading="lazy" src="assets/youtube.webp" alt="YouTube" class="social-icon">
+                    <a href="https://www.youtube.com/@imcrax" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/youtube.webp?v=7" alt="YouTube" class="social-icon">
                     </a>
-                    <a href="https://www.tiktok.com/@crax.ae" target="_blank">
-                        <img loading="lazy" src="assets/tiktok.webp" alt="TikTok" class="social-icon">
+                    <a href="https://www.tiktok.com/@crax.ae" target="_blank" rel="noopener noreferrer">
+                        <img src="assets/tiktok.webp?v=7" alt="TikTok" class="social-icon">
                     </a>
                 </div>
 
@@ -876,11 +899,11 @@
         <div id="music-player">
             <span class="orbit-ring"><span class="orbit-line"></span></span>
             <div class="player-art">
-                <img loading="lazy" src="assets/homecoming.webp" alt="Album Art" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
+                <img src="assets/homecoming.webp?v=7" alt="Album Art" style="width:100%;height:100%;object-fit:cover;border-radius:6px;">
             </div>
             <span id="current-time">0:00</span>
             <div id="progress-container">
-                <input type="range" id="music-progress" min="0" max="100" value="0" step="0.01">
+                <input type="range" id="music-progress" min="0" max="100" value="0" step="0.01" aria-label="Seek">
             </div>
             <span id="total-time">0:00</span>
             <div class="player-controls">
@@ -902,14 +925,14 @@
                 <svg id="volume-icon" class="volume-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
                 </svg>
-                <input id="volume-slider" class="slider" type="range" min="0" max="1" step="0.01" value="0.3">
+                <input id="volume-slider" class="slider" type="range" min="0" max="1" step="0.01" value="0.3" aria-label="Volume">
             </div>
             <div class="transparency-control">
                 <svg class="transparency-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                 </svg>
-                <input id="transparency-slider" class="slider" type="range" min="0" max="1" step="0.01" value="0.4">
+                <input id="transparency-slider" class="slider" type="range" min="0" max="1" step="0.01" value="0.4" aria-label="Panel transparency">
             </div>
         </div>
         </div>
@@ -947,16 +970,14 @@
     </section>
 
 
-    <audio id="background-music">
-        <source src="" type="audio/mp3">
+    <audio id="background-music" preload="none">
+        <source type="audio/mpeg">
     </audio>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
-
-    <script src="script.min.js?v=6"></script>
+    <script defer src="assets/vendor/gsap.min.js"></script>
+    <script defer src="assets/vendor/ScrollTrigger.min.js"></script>
+    <script defer src="script.js?v=7"></script>
 </body>
 </html>
 

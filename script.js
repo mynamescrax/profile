@@ -12,6 +12,10 @@ const songs = [
 ];
 let currentSongIndex = 0;
 
+const ASSET_VERSION = '7';
+const SAVE_DATA = !!(navigator.connection && navigator.connection.saveData);
+let allowPreload = false;
+
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
@@ -20,8 +24,9 @@ window.scrollTo(0, 0);
 const nextAudio = new Audio();
 
 function preloadNextSong() {
+  if (!allowPreload) return;
   const next = songs[(currentSongIndex + 1) % songs.length];
-  nextAudio.src = next + '?v=6';
+  nextAudio.src = next + '?v=' + ASSET_VERSION;
   nextAudio.load();
 }
 
@@ -33,9 +38,14 @@ function loadSong(index, autoPlay) {
   const music = document.getElementById('background-music');
   const art = document.querySelector('.player-art img');
   const song = songs[index];
-  music.querySelector('source').src = song + '?v=6';
+  const source = music.querySelector('source');
+  if (source) source.src = song + '?v=' + ASSET_VERSION;
   music.load();
-  if (art) art.src = song.replace('.mp3', '.webp') + '?v=6';
+  if (art) {
+    art.style.visibility = '';
+    art.onerror = () => { art.style.visibility = 'hidden'; };
+    art.src = song.replace('.mp3', '.webp') + '?v=' + ASSET_VERSION;
+  }
   if (autoPlay) music.addEventListener('canplay', () => safePlay(music), { once: true });
   preloadNextSong();
 }
@@ -51,23 +61,35 @@ function initMedia() {
   const profilePics = ['assets/profile2.webp', 'assets/profile4.webp', 'assets/profile3.webp'];
   const profileImg = document.querySelector('.profile-picture');
   if (profileImg) {
-    profileImg.src = profilePics[Math.floor(Math.random() * profilePics.length)] + '?v=6';
+    profileImg.src = profilePics[Math.floor(Math.random() * profilePics.length)] + '?v=' + ASSET_VERSION;
   }
 
-  const backgrounds = [
-    'assets/background9.mp4',
-  ];
-  const chosen = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-  backgroundVideo.querySelector('source').src = chosen + '?v=6';
-  backgroundVideo.load();
-
+  // Pick the track now, but don't download a byte of media until the user
+  // unlocks the page - nothing can play before that click anyway.
   currentSongIndex = Math.floor(Math.random() * songs.length);
-  loadSong(currentSongIndex);
 
   backgroundMusic.volume = 0.3;
   backgroundVideo.muted = true;
+}
 
+function startMedia() {
+  const backgroundMusic = document.getElementById('background-music');
+  const backgroundVideo = document.getElementById('background');
+  const backgrounds = ['assets/background9.mp4'];
+  const chosen = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+
+  const source = backgroundVideo.querySelector('source');
+  if (source) source.src = chosen + '?v=' + ASSET_VERSION;
+  backgroundVideo.load();
   safePlay(backgroundVideo);
+
+  loadSong(currentSongIndex, true);
+
+  backgroundMusic.addEventListener('playing', () => {
+    if (SAVE_DATA) return;
+    allowPreload = true;
+    preloadNextSong();
+  }, { once: true });
 }
 
 const ICON_SOUND = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>';
@@ -97,6 +119,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const topControlsEl = document.querySelector('.top-controls');
   const contentWrapper = document.getElementById('content-wrapper');
   const profileOutline = document.getElementById('profile-outline');
+
+  function makeKeyboardButton(el, label) {
+    if (!el) return;
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('aria-label', label);
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        el.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      }
+    });
+  }
 
   const startMessage = "Click here to see me bbg 😘😘";
   let startTextContent = '';
@@ -255,9 +290,14 @@ document.addEventListener('DOMContentLoaded', () => {
     ScrollTrigger.refresh();
   }
 
+  let unlocked = false;
+
   function unlockPage() {
+    if (unlocked) return;
+    unlocked = true;
     startScreen.classList.add('hidden');
     document.body.style.overflowY = 'auto';
+    startMedia();
     backgroundMusic.muted = false;
     safePlay(backgroundMusic);
     startOutlineSync();
@@ -281,6 +321,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   startScreen.addEventListener('click', unlockPage);
   startScreen.addEventListener('touchstart', (e) => { e.preventDefault(); unlockPage(); });
+  startScreen.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      unlockPage();
+    }
+  });
 
 
   const name = "crax";
@@ -726,6 +772,11 @@ document.addEventListener('DOMContentLoaded', () => {
   prevBtn.addEventListener('click', prevSong);
   nextBtn.addEventListener('click', nextSong);
   backgroundMusic.addEventListener('ended', () => nextSong(true));
+
+  makeKeyboardButton(volumeIcon, 'Toggle mute');
+  makeKeyboardButton(playPauseBtn, 'Play or pause');
+  makeKeyboardButton(prevBtn, 'Previous track');
+  makeKeyboardButton(nextBtn, 'Next track');
 
   typeWriterStart();
 });
