@@ -1,9 +1,10 @@
 # deploy.ps1 - push to GitHub and fast-forward the VPS checkout.
 #
 # Version bump rules:
-#   - Changed a file in assets/  -> bump ASSET_VERSION in script.js AND the ?v=
-#     strings in index.html (CSS font url, social icons, poster).
-#   - Changed only script.js     -> bump ?v= on the <script> tag in index.html.
+#   - Changed a song or the background video -> bump ASSET_VERSION in script.js
+#   - Changed album art or a profile picture  -> bump ART_VERSION in script.js
+#   - Changed the font, a social icon or the poster -> bump its ?v= in index.html
+#   - Changed script.js -> bump ?v= on the <script> tag in index.html
 #   - index.html itself is served no-cache, so it is always fresh.
 $ErrorActionPreference = 'Stop'
 

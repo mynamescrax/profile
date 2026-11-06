@@ -13,6 +13,9 @@ const songs = [
 let currentSongIndex = 0;
 
 const ASSET_VERSION = '8';
+// Album art and profile pictures change far more often than the audio, so they
+// get their own version - bumping this doesn't re-download every song.
+const ART_VERSION = '9';
 const SAVE_DATA = !!(navigator.connection && navigator.connection.saveData);
 let allowPreload = false;
 
@@ -44,7 +47,7 @@ function loadSong(index, autoPlay) {
   if (art) {
     art.style.visibility = '';
     art.onerror = () => { art.style.visibility = 'hidden'; };
-    art.src = song.replace('.mp3', '.webp') + '?v=' + ASSET_VERSION;
+    art.src = song.replace('.mp3', '.webp') + '?v=' + ART_VERSION;
   }
   if (autoPlay) music.addEventListener('canplay', () => safePlay(music), { once: true });
   preloadNextSong();
@@ -61,7 +64,7 @@ function initMedia() {
   const profilePics = ['assets/profile2.webp', 'assets/profile4.webp', 'assets/profile3.webp'];
   const profileImg = document.querySelector('.profile-picture');
   if (profileImg) {
-    profileImg.src = profilePics[Math.floor(Math.random() * profilePics.length)] + '?v=' + ASSET_VERSION;
+    profileImg.src = profilePics[Math.floor(Math.random() * profilePics.length)] + '?v=' + ART_VERSION;
   }
 
   // Pick the track now, but don't download a byte of media until the user
