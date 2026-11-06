@@ -3,7 +3,6 @@ const songs = [
   'assets/blackbeatles.mp3',
   'assets/worldsafuck.mp3',
   'assets/священная-война.mp3',
-  'assets/arkpatrol-letgo.mp3',
   'assets/chiefkeef-idontlike.mp3',
   'assets/chiefkeef-saveme.mp3',
   'assets/laughin-to-the-bank.mp3',
